@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>IETD | Estandarización de procesos</title>
+<style>
+:root{--red:#ef123d;--black:#1f1a1b;--white:#fff;--gray:#746b6d;--line:#e8e3e4;--soft:#faf8f8}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#fff;color:var(--black);font-family:Segoe UI,Arial,sans-serif;overflow:hidden}
+button{font:inherit;color:inherit}.app{height:100%;display:grid;grid-template-rows:auto 1fr;background:#fff}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 4.5%;border-bottom:1px solid var(--line);background:#fff;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.03em}.brand-mark{width:12px;height:34px;background:var(--red);border-radius:2px}.brand small{display:block;color:var(--gray);font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase}.brand strong{font-size:16px}
+.route{display:flex;align-items:center;gap:5px;overflow-x:auto;padding:2px}.route button{border:0;background:transparent;border-radius:9px;padding:9px 11px;cursor:pointer;font-size:12px;font-weight:800;white-space:nowrap}.route button:hover{background:var(--soft)}.route button.active{background:var(--black);color:#fff}
+.view{position:relative;overflow:hidden}.page{position:absolute;inset:0;overflow:auto;padding:34px 5% 42px;background:#fff;opacity:0;pointer-events:none;transform:translateX(20px);transition:.22s ease}.page.active{opacity:1;pointer-events:auto;transform:none}.wrap{width:min(1360px,100%);margin:auto}
+.kicker{font-size:12px;color:var(--red);font-weight:900;letter-spacing:.14em;text-transform:uppercase}.title{font-size:clamp(38px,4.4vw,68px);line-height:.92;letter-spacing:-.035em;text-transform:uppercase;margin:8px 0 0;font-weight:900}.subtitle{font-size:clamp(17px,1.55vw,23px);line-height:1.3;color:var(--gray);max-width:900px;margin:14px 0 0}.redline{width:82px;height:5px;background:var(--red);border-radius:5px;margin:16px 0 0}
+.hero{display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center;min-height:calc(100vh - 150px)}.hero .title{font-size:clamp(48px,6vw,86px)}.hero-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.hero-card{position:relative;min-height:180px;border:0;background:transparent;padding:0;cursor:pointer;perspective:1000px;text-align:left}.hero-card-inner{position:absolute;inset:0;transition:transform .5s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}.hero-card.flipped .hero-card-inner{transform:rotateY(180deg)}.hero-face{position:absolute;inset:0;border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;justify-content:flex-end;background:#fff;color:var(--black);backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}.hero-front.red{background:#fff;color:var(--black);border-color:var(--line)}.hero-back{transform:rotateY(180deg);justify-content:center;align-items:flex-start;background:var(--black);color:#fff;border-color:var(--black);padding:18px 20px}.hero-card .n{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:var(--red);margin:0}.hero-front.red .n,.hero-back .n{color:var(--red)}.hero-face>strong{display:block;font-size:23px;line-height:1.06;margin-top:8px;color:var(--black)}.hero-back>strong{font-size:16px;line-height:1.18;margin-top:8px;max-width:100%;color:#fff}.hero-back>span:last-child{display:block;font-size:12px;line-height:1.32;color:#e8e3e4;margin-top:8px;max-width:100%}.flip-hint{display:none}.hero-card:focus-visible{outline:3px solid var(--red);outline-offset:3px;border-radius:18px}@media (hover:hover) and (pointer:fine){.hero-card:hover .hero-face{box-shadow:0 0 0 1px var(--red)}}
+.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:28px}.section-head .title{font-size:clamp(34px,3.6vw,54px)}.tag{border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:11px;font-weight:900;color:var(--gray);white-space:nowrap}
+.objectives{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:30px}.obj{border:1px solid var(--line);border-radius:18px;padding:20px;min-height:160px}.obj .num{font-size:11px;color:var(--red);font-weight:900;letter-spacing:.12em}.obj h3{font-size:21px;line-height:1.05;margin:16px 0 7px}.obj p{font-size:13px;line-height:1.35;color:var(--gray);margin:0}.principle{margin-top:18px;background:var(--black);color:#fff;border-radius:16px;padding:18px 20px;display:flex;gap:18px;align-items:center}.principle b{color:#fff}.principle span{font-size:14px;opacity:.86}.principle .arrow{font-size:24px;color:var(--red);font-weight:900}
+.phase-route{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}.phase{position:relative;border:1px solid var(--line);background:#fff;border-radius:18px;padding:19px;min-height:170px;text-align:left;cursor:pointer;transition:.18s}.phase:hover{transform:translateY(-2px);border-color:#cfc6c8}.phase.active{border:2px solid var(--red);padding:18px}.phase .no{font-size:11px;color:var(--red);font-weight:900;letter-spacing:.12em}.phase h3{font-size:25px;line-height:.95;text-transform:uppercase;margin:16px 0 7px}.phase p{font-size:12.5px;color:var(--gray);line-height:1.3;margin:0}.phase .count{position:absolute;right:13px;top:13px;font-size:10px;font-weight:900;background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:5px 8px}
+.phase-line{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:16px auto 22px;text-align:center}.node{border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:11px;font-weight:800;white-space:nowrap}.arr{color:var(--red);font-weight:900}
+.phase-detail{border-top:1px solid var(--line);padding-top:20px;min-height:245px}.phase-detail-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:14px}.phase-detail h2{font-size:31px;text-transform:uppercase;margin:0}.phase-detail .desc{font-size:13px;color:var(--gray);margin-top:5px}.stages{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stage-btn{border:1px solid var(--line);background:#fff;border-radius:15px;padding:15px;text-align:left;cursor:pointer;min-height:110px}.stage-btn:hover{border-color:var(--red)}.stage-btn .i{font-size:11px;font-weight:900;color:var(--red)}.stage-btn strong{display:block;font-size:16px;margin-top:7px;line-height:1.05}.stage-btn span{display:block;color:var(--gray);font-size:11.5px;margin-top:6px}
+.timeline{display:grid;grid-template-columns:200px repeat(8,1fr);gap:5px;min-width:860px;align-items:center}.timeline .wk{font-size:10px;text-align:center;color:var(--gray);font-weight:800}.timeline .lab{font-size:12px;font-weight:800;padding-right:8px}.cell{height:27px;border-radius:6px;background:var(--soft);border:1px solid var(--line)}.cell.on{background:var(--black);border-color:var(--black)}.cell.red{background:var(--red);border-color:var(--red)}.timeline-wrap{overflow-x:auto;margin-top:26px}.milestones{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}.milestone{border:1px solid var(--line);border-radius:15px;padding:15px}.milestone small{color:var(--red);font-weight:900;letter-spacing:.1em}.milestone strong{display:block;font-size:18px;margin-top:7px}.milestone span{display:block;color:var(--gray);font-size:12px;margin-top:4px}
+.deliverables{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}.deliverable{border:1px solid var(--line);border-radius:17px;padding:18px;background:#fff;text-align:left;cursor:pointer;min-height:145px}.deliverable:hover{border-color:var(--red);transform:translateY(-2px)}.deliverable .n{font-size:12px;color:var(--red);font-weight:900}.deliverable strong{display:block;font-size:18px;line-height:1.05;margin-top:12px}.deliverable span{display:block;color:var(--gray);font-size:12px;line-height:1.3;margin-top:7px}
+.matrix{width:100%;border-collapse:collapse;margin-top:24px;border:1px solid var(--line);font-size:12px}.matrix th,.matrix td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left}.matrix th{background:var(--black);color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:.06em}.matrix tr:last-child td{border-bottom:0}.pill{font-size:10px;font-weight:900;border-radius:999px;padding:5px 8px;display:inline-block}.pill.red{background:var(--red);color:#fff}.pill.black{background:var(--black);color:#fff}.pill.line{border:1px solid var(--line)}.priority-note{margin-top:16px;border-left:4px solid var(--red);padding:12px 14px;background:var(--soft);font-size:13px}.priority-note b{color:var(--red)}
+.team{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}.team-panel{border:1px solid var(--line);border-radius:18px;padding:20px}.team-panel h3{font-size:23px;text-transform:uppercase;margin:0 0 16px}.item{display:grid;grid-template-columns:34px 1fr;gap:10px;margin:13px 0;align-items:start}.ico{width:31px;height:31px;display:grid;place-items:center;background:var(--red);color:#fff;border-radius:9px;font-weight:900}.item b{font-size:14px}.item span{display:block;font-size:12px;color:var(--gray);margin-top:3px}.closing{margin-top:18px;border-radius:17px;background:var(--black);color:#fff;padding:18px 20px}.closing strong{font-size:22px;display:block}.closing span{font-size:13px;opacity:.85;display:block;margin-top:7px}
+.modal{position:fixed;inset:0;background:rgba(31,26,27,.52);display:none;align-items:center;justify-content:center;padding:24px;z-index:50}.modal.open{display:flex}.modal-card{width:min(620px,100%);background:#fff;border-radius:18px;padding:24px;box-shadow:0 20px 70px rgba(0,0,0,.2)}.modal-top{display:flex;justify-content:space-between;gap:20px}.modal-kicker{font-size:11px;color:var(--red);font-weight:900;letter-spacing:.1em;text-transform:uppercase}.modal h3{font-size:28px;line-height:1;margin:7px 0 12px}.modal p{font-size:14px;line-height:1.45;color:var(--gray);margin:0}.modal .deliver{margin-top:17px;border-left:4px solid var(--red);background:var(--soft);padding:12px 14px;font-size:13px}.close{width:38px;height:38px;border:1px solid var(--line);background:#fff;border-radius:50%;cursor:pointer;font-size:20px;font-weight:900}.close:hover{background:var(--black);color:#fff}
+@media(max-width:1000px){html,body{overflow:auto}.app{min-height:100vh;height:auto;display:block}.topbar{position:sticky;top:0;flex-direction:column;align-items:flex-start;padding:12px 4%}.route{width:100%}.view{height:auto;overflow:visible}.page{position:relative;display:none;min-height:calc(100vh - 120px);padding:28px 4%}.page.active{display:block}.hero{grid-template-columns:1fr;min-height:auto}.objectives,.phase-route,.deliverables{grid-template-columns:1fr 1fr}.stages{grid-template-columns:1fr 1fr}.team{grid-template-columns:1fr}.hero-card-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.objectives,.phase-route,.deliverables,.stages,.milestones,.hero-card-grid{grid-template-columns:1fr}.section-head{flex-direction:column}.phase-detail-head{align-items:flex-start;flex-direction:column}.title{font-size:38px}.hero .title{font-size:48px}.route button{padding:8px 9px}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark"></span><div><small>IETD</small><strong>Estandarización de procesos</strong></div></div>
+    <nav class="route" aria-label="Ruta de presentación">
+      <button data-page="inicio" class="active">Inicio</button>
+      <button data-page="objetivo">Objetivo</button>
+      <button data-page="metodologia">Metodología</button>
+      <button data-page="cronograma">Cronograma</button>
+      <button data-page="entregables">Entregables</button>
+      <button data-page="matriz">Matriz</button>
+      <button data-page="equipo">Equipo</button>
+    </nav>
+  </header>
+
+  <main class="view">
+    <section class="page active" id="inicio"><div class="wrap hero">
+      <div>
+        <div class="kicker">Proyecto IETD</div>
+        <h1 class="title">Levantamiento y estandarización de procesos</h1>
+        <div class="redline"></div>
+        <p class="subtitle">Conocer cómo trabajamos hoy, ordenar el conocimiento del equipo y dejar procesos claros, transferibles y sostenibles.</p>
+      </div>
+      <div class="hero-card-grid" aria-label="Resultados esperados del proyecto">
+        <button type="button" class="hero-card" aria-pressed="false"><span class="hero-card-inner"><span class="hero-face hero-front"><span class="n">Resultado</span><strong>Procesos claros</strong></span><span class="hero-face hero-back"><span class="n">Procesos claros</span><strong>Qué hacemos, quién participa y cómo se ejecuta.</strong><span>Una visión compartida de la operación del equipo.</span></span></span></button>
+        <button type="button" class="hero-card" aria-pressed="false"><span class="hero-card-inner"><span class="hero-face hero-front"><span class="n">Visual</span><strong>Flujogramas</strong></span><span class="hero-face hero-back"><span class="n">Flujogramas</span><strong>Ver el proceso de principio a fin.</strong><span>Ruta actual (AS-IS) y ruta mejorada (TO-BE) cuando corresponda.</span></span></span></button>
+        <button type="button" class="hero-card" aria-pressed="false"><span class="hero-card-inner"><span class="hero-face hero-front"><span class="n">Conocimiento</span><strong>Manuales</strong></span><span class="hero-face hero-back"><span class="n">Manuales</span><strong>Transferir el conocimiento operativo.</strong><span>Pasos esenciales, responsables y referencias necesarias para ejecutar el proceso.</span></span></span></button>
+        <button type="button" class="hero-card" aria-pressed="false"><span class="hero-card-inner"><span class="hero-face hero-front"><span class="n">Continuidad</span><strong>Repositorio</strong></span><span class="hero-face hero-back"><span class="n">Repositorio</span><strong>Conservar y mantener el conocimiento.</strong><span>Documentación centralizada, ordenada y fácil de actualizar.</span></span></span></button>
+      </div>
+    </div></section>
+
+    <section class="page" id="objetivo"><div class="wrap">
+      <div class="section-head"><div><div class="kicker">¿Qué queremos lograr?</div><h2 class="title">Del conocimiento individual al conocimiento compartido</h2><p class="subtitle">El proyecto busca entender primero y documentar después.</p></div><div class="tag">4 objetivos</div></div>
+      <div class="objectives">
+        <div class="obj"><div class="num">01</div><h3>Identificar</h3><p>Qué procesos existen y quién los ejecuta.</p></div>
+        <div class="obj"><div class="num">02</div><h3>Entender</h3><p>Cómo funciona realmente cada proceso.</p></div>
+        <div class="obj"><div class="num">03</div><h3>Mejorar</h3><p>Dónde hay reprocesos, dependencias o pasos innecesarios.</p></div>
+        <div class="obj"><div class="num">04</div><h3>Documentar</h3><p>Dejar flujos y manuales validados por el equipo.</p></div>
+      </div>
+      <div class="principle"><span class="arrow">→</span><div><b>Principio:</b> <span>No empezamos haciendo manuales. Primero descubrimos el proceso, luego lo entendemos y finalmente lo documentamos.</span></div></div>
+    </div></section>
+
+    <section class="page" id="metodologia"><div class="wrap">
+      <div class="section-head"><div><div class="kicker">Ruta del proyecto</div><h2 class="title">4 fases · 10 etapas</h2><p class="subtitle">Haz clic en una fase para ver únicamente las etapas que le corresponden.</p></div><div class="tag">Ruta interactiva</div></div>
+      <div class="phase-route" id="phaseRoute"></div>
+      <div class="phase-line"><span class="node">Persona</span><span class="arr">→</span><span class="node">Funciones</span><span class="arr">→</span><span class="node">Procesos</span><span class="arr">→</span><span class="node">AS-IS</span><span class="arr">→</span><span class="node">TO-BE</span><span class="arr">→</span><span class="node">Manual</span></div>
+      <div class="phase-detail" id="phaseDetail"></div>
+    </div></section>
+
+    <section class="page" id="cronograma"><div class="wrap">
+      <div class="section-head"><div><div class="kicker">Tiempo de trabajo</div><h2 class="title">Cronograma inicial de 8 semanas</h2><p class="subtitle">El tiempo final dependerá del número y complejidad de procesos identificados.</p></div><div class="tag">Propuesta inicial</div></div>
+      <div class="timeline-wrap"><div class="timeline" id="timeline"></div></div>
+      <div class="milestones">
+        <div class="milestone"><small>Hito 1</small><strong>Inventario completo</strong><span>Sabemos qué procesos existen.</span></div>
+        <div class="milestone"><small>Hito 2</small><strong>Flujos validados</strong><span>El equipo confirma la operación real.</span></div>
+        <div class="milestone"><small>Hito 3</small><strong>Repositorio operativo</strong><span>Manuales y flujos quedan organizados.</span></div>
+      </div>
+    </div></section>
+
+    <section class="page" id="entregables"><div class="wrap">
+      <div class="section-head"><div><div class="kicker">Qué quedará</div><h2 class="title">Entregables del proyecto</h2><p class="subtitle">Haz clic en cada recurso para ver para qué sirve.</p></div><div class="tag">6 recursos</div></div>
+      <div class="deliverables" id="deliverables"></div>
+    </div></section>
+
+    <section class="page" id="matriz"><div class="wrap">
+      <div class="section-head"><div><div class="kicker">Columna vertebral</div><h2 class="title">Matriz maestra de procesos IETD</h2><p class="subtitle">Nos permitirá saber qué existe, quién lo ejecuta y qué falta documentar.</p></div><div class="tag">Seguimiento</div></div>
+      <div style="overflow-x:auto"><table class="matrix">
+        <thead><tr><th>ID</th><th>Integrante</th><th>Proceso</th><th>Frecuencia</th><th>Manual</th><th>Flujo</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>P01</td><td>Persona A</td><td>Alta de usuarios</td><td>Según solicitud</td><td>Sí</td><td>Sí</td><td><span class="pill black">Validado</span></td></tr>
+          <tr><td>P02</td><td>Persona B</td><td>Actualización de dashboard</td><td>Semanal</td><td>Sí</td><td>Sí</td><td><span class="pill line">En revisión</span></td></tr>
+          <tr><td>P03</td><td>Persona C</td><td>Evaluación de iniciativas</td><td>Mensual</td><td>Pendiente</td><td>Sí</td><td><span class="pill red">Levantar</span></td></tr>
+        </tbody>
+      </table></div>
+      <div class="priority-note"><b>Prioridad:</b> documentar primero los procesos críticos, frecuentes o dependientes de una sola persona.</div>
+    </div></section>
+
+    <section class="page" id="equipo"><div class="wrap">
+      <div class="section-head"><div><div class="kicker">Participación</div><h2 class="title">¿Qué necesitamos del equipo?</h2><p class="subtitle">La información saldrá de quienes ejecutan los procesos día a día.</p></div><div class="tag">Trabajo colaborativo</div></div>
+      <div class="team">
+        <div class="team-panel"><h3>Durante el levantamiento</h3>
+          <div class="item"><div class="ico">1</div><div><b>Contar qué hacemos</b><span>Funciones y procesos recurrentes.</span></div></div>
+          <div class="item"><div class="ico">2</div><div><b>Mostrar cómo lo hacemos</b><span>Pasos, herramientas e interacciones.</span></div></div>
+          <div class="item"><div class="ico">3</div><div><b>Señalar dificultades</b><span>Reprocesos, esperas y dependencias.</span></div></div>
+          <div class="item"><div class="ico">4</div><div><b>Validar</b><span>Confirmar flujo y manual final.</span></div></div>
+        </div>
+        <div class="team-panel"><h3>Qué priorizamos primero</h3>
+          <div class="item"><div class="ico">1</div><div><b>Dependencia de una sola persona</b><span>Riesgo de pérdida de conocimiento.</span></div></div>
+          <div class="item"><div class="ico">2</div><div><b>Alta frecuencia</b><span>Procesos que se ejecutan constantemente.</span></div></div>
+          <div class="item"><div class="ico">3</div><div><b>Impacto en otras áreas</b><span>Procesos con múltiples dependencias.</span></div></div>
+          <div class="item"><div class="ico">4</div><div><b>Sin documentación</b><span>Procesos que hoy viven solo en la experiencia.</span></div></div>
+        </div>
+      </div>
+      <div class="closing"><strong>No buscamos fiscalizar cómo trabaja cada persona.</strong><span>Buscamos entender, ordenar y preservar el conocimiento del equipo.</span></div>
+    </div></section>
+  </main>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card"><div class="modal-top"><div><div class="modal-kicker" id="modalKicker">Detalle</div><h3 id="modalTitle"></h3></div><button class="close" id="modalClose" aria-label="Cerrar">×</button></div><p id="modalText"></p><div class="deliver" id="modalDeliver"></div></div>
+</div>
+<script>
+(()=>{
+const app=document.getElementById('app');
+const routeBtns=[...app.querySelectorAll('.route button')];
+const pages=[...app.querySelectorAll('.page')];
+function showPage(id){pages.forEach(p=>p.classList.toggle('active',p.id===id));routeBtns.forEach(b=>b.classList.toggle('active',b.dataset.page===id));}
+routeBtns.forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+
+const heroCards=[...app.querySelectorAll('.hero-card')];
+heroCards.forEach(card=>card.addEventListener('click',()=>{
+  const next=!card.classList.contains('flipped');
+  card.classList.toggle('flipped',next);
+  card.setAttribute('aria-pressed',String(next));
+}));
+
+const phases=[
+ {name:'Descubrir',summary:'Definir el alcance e identificar qué procesos existen.',stages:[
+  {n:'1.1',t:'Preparación y alcance',s:'Definir personas, procesos y cronograma.',d:'Acordar qué revisaremos, quiénes participarán y cómo organizaremos el trabajo.',e:'Plan de trabajo + matriz inicial de responsables.'},
+  {n:'1.2',t:'Identificación de procesos',s:'Reconocer qué hace cada integrante.',d:'Conversar con cada miembro para identificar funciones, procesos, frecuencia y resultados.',e:'Inventario / mapa de procesos por persona.'}
+ ]},
+ {name:'Entender',summary:'Levantar cómo funciona realmente cada proceso.',stages:[
+  {n:'2.1',t:'Levantamiento',s:'Describir inicio, pasos, decisiones y cierre.',d:'Registrar actividades, participantes, herramientas, insumos, entregables y dependencias.',e:'Ficha de levantamiento del proceso.'},
+  {n:'2.2',t:'Flujo AS-IS',s:'Representar cómo se trabaja hoy.',d:'Convertir el levantamiento en un flujo visual con responsables, decisiones e interacciones.',e:'Flujograma AS-IS.'}
+ ]},
+ {name:'Estandarizar',summary:'Detectar mejoras y acordar la forma de trabajo.',stages:[
+  {n:'3.1',t:'Análisis de mejoras',s:'Detectar reprocesos y dependencias.',d:'Revisar duplicidades, pasos manuales, cuellos de botella y responsabilidades poco claras.',e:'Matriz de oportunidades de mejora.'},
+  {n:'3.2',t:'Proceso TO-BE',s:'Definir cómo debería quedar.',d:'Acordar ajustes con el responsable. Solo se modifica cuando realmente aporta valor.',e:'Flujograma TO-BE / proceso validado.'},
+  {n:'3.3',t:'Manual operativo',s:'Documentar el proceso acordado.',d:'Convertir el proceso validado en instrucciones claras, responsables y referencias visuales.',e:'Manual operativo por proceso.'},
+  {n:'3.4',t:'Validación',s:'Confirmar que el documento es correcto.',d:'El responsable revisa el flujo y el manual antes de considerarlos finalizados.',e:'Documentos validados.'}
+ ]},
+ {name:'Consolidar',summary:'Ordenar el conocimiento y mantenerlo vigente.',stages:[
+  {n:'4.1',t:'Repositorio',s:'Organizar todo bajo una estructura común.',d:'Centralizar procesos, flujos y manuales para que sean fáciles de encontrar y consultar.',e:'Repositorio central + catálogo maestro.'},
+  {n:'4.2',t:'Seguimiento',s:'Definir cómo se mantendrá actualizado.',d:'Asignar responsables y establecer cuándo revisar la documentación ante cambios.',e:'Esquema de mantenimiento.'}
+ ]}
+];
+const phaseRoute=document.getElementById('phaseRoute'), phaseDetail=document.getElementById('phaseDetail');
+phases.forEach((p,i)=>{const b=document.createElement('button');b.className='phase';b.innerHTML=`<span class="count">${p.stages.length} etapas</span><div class="no">FASE ${i+1}</div><h3>${p.name}</h3><p>${p.summary}</p>`;b.addEventListener('click',()=>selectPhase(i));phaseRoute.appendChild(b)});
+function selectPhase(i){[...phaseRoute.children].forEach((x,j)=>x.classList.toggle('active',i===j));const p=phases[i];phaseDetail.innerHTML=`<div class="phase-detail-head"><div><h2>Fase ${i+1} · ${p.name}</h2><div class="desc">${p.summary}</div></div><div class="tag">${p.stages.length} etapas</div></div><div class="stages"></div>`;const grid=phaseDetail.querySelector('.stages');p.stages.forEach(s=>{const b=document.createElement('button');b.className='stage-btn';b.innerHTML=`<div class="i">ETAPA ${s.n}</div><strong>${s.t}</strong><span>${s.s}</span>`;b.addEventListener('click',()=>openModal(`Etapa ${s.n}`,s.t,s.d,`Entregable: ${s.e}`));grid.appendChild(b)});}
+selectPhase(0);
+
+const timeline=document.getElementById('timeline');timeline.innerHTML='<div></div>'+Array.from({length:8},(_,i)=>`<div class="wk">S${i+1}</div>`).join('');
+const bands=[['Fase 1 · Descubrir',1,2,'red'],['Fase 2 · Entender',2,4,'on'],['Fase 3 · Estandarizar',5,7,'red'],['Fase 4 · Consolidar',7,8,'on']];
+bands.forEach(([lab,a,b,cl])=>{timeline.insertAdjacentHTML('beforeend',`<div class="lab">${lab}</div>`);for(let w=1;w<=8;w++)timeline.insertAdjacentHTML('beforeend',`<div class="cell ${w>=a&&w<=b?cl:''}"></div>`)});
+
+const dels=[
+ ['01','Matriz maestra','Control del universo de procesos y su estado.','Se actualiza durante todo el proyecto.'],
+ ['02','Ficha de levantamiento','Captura la operación real de cada proceso.','Se construye en la fase Entender.'],
+ ['03','Flujograma AS-IS','Muestra cómo funciona el proceso hoy.','Se construye en la fase Entender.'],
+ ['04','Matriz de mejoras','Ordena brechas y oportunidades detectadas.','Se construye en la fase Estandarizar.'],
+ ['05','Flujograma TO-BE','Representa el proceso mejorado cuando aplica.','Se construye en la fase Estandarizar.'],
+ ['06','Manual operativo','Deja el paso a paso listo para transferencia.','Se valida antes de ir al repositorio.']
+];
+const delWrap=document.getElementById('deliverables');dels.forEach(x=>{const b=document.createElement('button');b.className='deliverable';b.innerHTML=`<div class="n">${x[0]}</div><strong>${x[1]}</strong><span>${x[2]}</span>`;b.addEventListener('click',()=>openModal('Entregable',x[1],x[2],x[3]));delWrap.appendChild(b)});
+
+const modal=document.getElementById('modal'),mt=document.getElementById('modalTitle'),mk=document.getElementById('modalKicker'),mx=document.getElementById('modalText'),md=document.getElementById('modalDeliver');
+function openModal(k,t,x,d){mk.textContent=k;mt.textContent=t;mx.textContent=x;md.textContent=d;modal.classList.add('open')}
+function closeModal(){modal.classList.remove('open')}
+document.getElementById('modalClose').addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+})();
+</script>
+</body>
+</html>
